@@ -15,7 +15,7 @@ class PassingGradeModel extends Model
     *
     * @var string
     */
-    protected $table = 'passing_grade';
+    protected $table = 'passing_grades';
 
     /**
     * The attributes that are mass assignable.
