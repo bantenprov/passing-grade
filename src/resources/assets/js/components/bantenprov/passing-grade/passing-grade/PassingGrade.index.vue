@@ -3,13 +3,13 @@
     <div class="card-header">
       <i class="fa fa-table" aria-hidden="true"></i> {{ title }}
 
-      <ul class="nav nav-pills card-header-pills pull-right">
+      <!-- <ul class="nav nav-pills card-header-pills pull-right">
         <li class="nav-item">
           <button class="btn btn-primary btn-sm" role="button" @click="createRow">
             <i class="fa fa-plus" aria-hidden="true"></i>
           </button>
         </li>
-      </ul>
+      </ul> -->
     </div>
 
     <div class="card-body">
@@ -26,35 +26,37 @@
 
       <div class="table-responsive">
         <vuetable ref="vuetable"
-          api-url="/api/master-sktm"
+          api-url="/api/passing-grade"
           :fields="fields"
           :sort-order="sortOrder"
           :css="css.table"
           pagination-path=""
-          :per-page="5"
+          :per-page="10"
           :append-params="moreParams"
           @vuetable:pagination-data="onPaginationData"
           @vuetable:loading="onLoading"
           @vuetable:loaded="onLoaded">
           <template slot="actions" slot-scope="props">
             <div class="btn-group pull-right" role="group" style="display:flex;">
-              <button class="btn btn-info btn-sm" role="button" @click="viewRow(props.rowData)">
+              <!-- <button class="btn btn-info btn-sm" role="button" @click="viewRow(props.rowData)">
                 <span class="fa fa-eye"></span>
+              </button> -->
+              <button class="btn btn-info btn-sm" role="button" @click="viewRow(props.rowData)">
+                <span class="fa fa-eye"></span> Lihat
               </button>
-              <button class="btn btn-warning btn-sm" role="button" @click="editRow(props.rowData)">
+              <!-- <button class="btn btn-warning btn-sm" role="button" @click="editRow(props.rowData)">
                 <span class="fa fa-pencil"></span>
-              </button>
-              <button class="btn btn-danger btn-sm" role="button" @click="deleteRow(props.rowData)">
+              </button> -->
+              <!-- <button class="btn btn-danger btn-sm" role="button" @click="deleteRow(props.rowData)">
                 <span class="fa fa-trash"></span>
-              </button>
+              </button> -->
             </div>
           </template>
         </vuetable>
       </div>
 
       <div class="d-flex justify-content-between align-items-center">
-        <vuetable-pagination-info ref="paginationInfo"
-        ></vuetable-pagination-info>
+        <vuetable-pagination-info ref="paginationInfo"></vuetable-pagination-info>
         <vuetable-pagination ref="pagination"
           :css="css.pagination"
           @vuetable-pagination:change-page="onChangePage">
@@ -85,7 +87,7 @@ export default {
   data() {
     return {
       loading: true,
-      title: 'Master SKTM',
+      title: 'Passing Grade',
       fields: [
         {
           name: '__sequence',
@@ -93,24 +95,48 @@ export default {
           titleClass: 'center aligned',
           dataClass: 'right aligned'
         },
+        // {
+        //   name: 'npsn',
+        //   title: 'NPSN',
+        //   sortField: 'npsn',
+        //   titleClass: 'center aligned'
+        // },
         {
           name: 'nama',
-          title: 'Kriteria',
+          title: 'Nama Sekolah',
           sortField: 'nama',
           titleClass: 'center aligned'
         },
         {
-          name: 'instansi',
-          title: 'Instansi',
-          sortField: 'instansi',
+          name: 'jalur_umum',
+          title: 'Jalur Umum',
+          sortField: 'jalur_umum',
           titleClass: 'center aligned'
         },
         {
-          name: 'nilai',
-          title: 'Nilai',
-          sortField: 'nilai',
+          name: 'jalur_prestasi',
+          title: 'Jalur Prestasi',
+          sortField: 'jalur_prestasi',
           titleClass: 'center aligned'
         },
+        {
+          name: 'jumlah_pendaftar',
+          title: 'Jumlah Pendaftar',
+          sortField: 'jumlah_pendaftar',
+          titleClass: 'center aligned'
+        },
+        // {
+        //   name: 'no_telp',
+        //   title: 'No Telepon',
+        //   sortField: 'no_telp',
+        //   titleClass: 'center aligned'
+        // },
+        // {
+        //   name: 'master_zona.label',
+        //   title: 'Zona',
+        //   sortField: 'kode_zona',
+        //   titleClass: 'center aligned'
+        // },
         {
           name: '__slot:actions',
           title: 'Actions',
@@ -160,65 +186,65 @@ export default {
       this.loading = false;
     },
     createRow() {
-      window.location = '#/admin/master-sktm/create';
+      // window.location = '#/admin/passing-grade/create';
     },
     viewRow(rowData) {
-      window.location = '#/admin/master-sktm/'+rowData.id;
+      window.location = '#/admin/passing-grade/'+rowData.id;
     },
     editRow(rowData) {
-      window.location = '#/admin/master-sktm/'+rowData.id+'/edit';
+      // window.location = '#/admin/passing-grade/'+rowData.id+'/edit';
     },
     deleteRow(rowData) {
-      let app = this;
+      // let app = this;
 
-      swal({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger',
-        buttonsStyling: false,
-        reverseButtons: true
-      }).then((result) => {
-        if (result.value) {
-          axios.delete('/api/master-sktm/'+rowData.id)
-            .then(function(response) {
-              if (response.data.status == true) {
-                app.$refs.vuetable.reload();
+      // swal({
+      //   title: 'Are you sure?',
+      //   text: 'You won\'t be able to revert this!',
+      //   type: 'warning',
+      //   showCancelButton: true,
+      //   confirmButtonColor: '#3085d6',
+      //   cancelButtonColor: '#d33',
+      //   confirmButtonText: 'Yes, delete it!',
+      //   cancelButtonText: 'No, cancel!',
+      //   confirmButtonClass: 'btn btn-success',
+      //   cancelButtonClass: 'btn btn-danger',
+      //   buttonsStyling: false,
+      //   reverseButtons: true
+      // }).then((result) => {
+      //   if (result.value) {
+      //     axios.delete('/api/passing-grade/'+rowData.id)
+      //       .then(function(response) {
+      //         if (response.data.status == true) {
+      //           app.$refs.vuetable.reload();
 
-                swal(
-                  'Deleted',
-                  'Yeah!!! Your data has been deleted.',
-                  'success'
-                );
-              } else {
-                swal(
-                  'Failed',
-                  'Oops... Failed to delete data.',
-                  'error'
-                );
-              }
-            })
-            .catch(function(response) {
-              swal(
-                'Not Found',
-                'Oops... Your page is not found.',
-                'error'
-              );
-            });
-        } else if (result.dismiss === swal.DismissReason.cancel) {
-          swal(
-            'Cancelled',
-            'Your data is safe.',
-            'error'
-          );
-        }
-      });
+      //           swal(
+      //             'Deleted',
+      //             'Yeah!!! Your data has been deleted.',
+      //             'success'
+      //           );
+      //         } else {
+      //           swal(
+      //             'Failed',
+      //             'Oops... Failed to delete data.',
+      //             'error'
+      //           );
+      //         }
+      //       })
+      //       .catch(function(response) {
+      //         swal(
+      //           'Not Found',
+      //           'Oops... Your page is not found.',
+      //           'error'
+      //         );
+      //       });
+      //   } else if (result.dismiss === swal.DismissReason.cancel) {
+      //     swal(
+      //       'Cancelled',
+      //       'Your data is safe.',
+      //       'error'
+      //     );
+      //   }
+      // });
     }
   },
   events: {

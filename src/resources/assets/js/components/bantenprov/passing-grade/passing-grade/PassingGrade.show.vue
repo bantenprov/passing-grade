@@ -3,110 +3,284 @@
     <div class="card-header">
       <i class="fa fa-table" aria-hidden="true"></i> {{ title }}
 
-      <div class="btn-group pull-right" role="group" style="display:flex;">
-        <button class="btn btn-warning btn-sm" role="button" @click="edit">
-          <i class="fa fa-pencil" aria-hidden="true"></i>
-        </button>
-        <button class="btn btn-primary btn-sm" role="button" @click="back">
-          <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        </button>
-      </div>
+      <ul class="nav nav-pills card-header-pills pull-right">
+        <li class="nav-item">
+          <!-- <button class="btn btn-primary btn-sm" role="button" @click="createRow">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </button> -->
+          <button class="btn btn-primary btn-sm" role="button" @click="back">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          </button>
+        </li>
+      </ul>
     </div>
 
     <div class="card-body">
-      <dl class="row">
-          <dt class="col-4">Kriteria</dt>
-          <dd class="col-8">{{ model.nama }}</dd>
+      <div class="d-flex justify-content-between align-items-center">
+        <vuetable-filter-bar></vuetable-filter-bar>
+      </div>
 
-          <dt class="col-4">Instansi</dt>
-          <dd class="col-8">{{ model.instansi }}</dd>
-
-          <dt class="col-4">Nilai</dt>
-          <dd class="col-8">{{ model.nilai }}</dd>
-      </dl>
-    </div>
-
-    <div class="card-footer text-muted">
-      <div class="row">
-        <div class="col-md">
-          <b>Username :</b> {{ model.user.name }}
+      <div style="margin:20px 0;">
+        <div v-if="loading" class="d-flex justify-content-start align-items-center">
+          <i class="fa fa-refresh fa-spin fa-fw"></i>
+          <span>Loading...</span>
         </div>
-        <div class="col-md">
-          <div class="col-md text-right">Dibuat : {{ model.created_at }}</div>
-          <div class="col-md text-right">Diperbarui : {{ model.updated_at }}</div>
-        </div>
+      </div>
+
+      <div class="table-responsive">
+        <vuetable ref="vuetable"
+          api-url="apiUrl"
+          :fields="fields"
+          :sort-order="sortOrder"
+          :css="css.table"
+          pagination-path=""
+          :per-page="10"
+          :append-params="moreParams"
+          @vuetable:pagination-data="onPaginationData"
+          @vuetable:loading="onLoading"
+          @vuetable:loaded="onLoaded">
+          <template slot="actions" slot-scope="props">
+            <div class="btn-group pull-right" role="group" style="display:flex;">
+              <button class="btn btn-info btn-sm" role="button" @click="viewRow(props.rowData)">
+                <span class="fa fa-eye"></span>
+              </button>
+              <button class="btn btn-warning btn-sm" role="button" @click="editRow(props.rowData)">
+                <span class="fa fa-pencil"></span>
+              </button>
+              <button class="btn btn-danger btn-sm" role="button" @click="deleteRow(props.rowData)">
+                <span class="fa fa-trash"></span>
+              </button>
+            </div>
+          </template>
+        </vuetable>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center">
+        <vuetable-pagination-info ref="paginationInfo"></vuetable-pagination-info>
+        <vuetable-pagination ref="pagination"
+          :css="css.pagination"
+          @vuetable-pagination:change-page="onChangePage">
+        </vuetable-pagination>
       </div>
     </div>
   </div>
 </template>
 
+<style>
+.vuetable-th-sequence{
+  width: 1px;
+}
+.vuetable-th-slot-actions {
+  width: 1px;
+  white-space: normal;
+}
+</style>
+
 <script>
 import swal from 'sweetalert2';
+import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo';
 
 export default {
+  components: {
+    VuetablePaginationInfo
+  },
   data() {
     return {
-      state: {},
-      title: 'View Master SKTM',
-      model: {
-        nama        : '',
-        instansi    : '',
-        nilai       : '',
-        user_id     : '',
-        created_at  : '',
-        updated_at  : '',
+      loading: true,
 
-        user        : [],
+      jenis_kelamin: [
+        {id: 1, label: 'Laki-laki'},
+        {id: 2, label: 'Perempuan'}
+      ],
+      selectedJenisKelamin: {id: "-", label: 'Pilih Salah Satu'},
+
+      agama: [
+        {id: 1, label: 'Islam'},
+        {id: 2, label: 'Kristen Protestan'},
+        {id: 3, label: 'Kristen Katolik'},
+        {id: 4, label: 'Hindu'},
+        {id: 5, label: 'Buddha'},
+        {id: 6, label: 'Khonghucu'}
+      ],
+      selectedAgama: {id: "-", label: 'Pilih Salah Satu'},
+
+      title: 'View Passing Grade',
+      fields: [
+        {
+          name: '__sequence',
+          title: '#',
+          titleClass: 'center aligned',
+          dataClass: 'right aligned'
+        },
+        {
+          name: 'nomor_un',
+          title: 'Nomor UN',
+          sortField: 'nomor_un',
+          titleClass: 'center aligned'
+        },
+        {
+          name: 'nama_siswa',
+          title: 'Nama Siswa',
+          sortField: 'nama_siswa',
+          titleClass: 'center aligned'
+        },
+        {
+          name: 'jenis_kelamin',
+          title: 'Jenis Kelamin',
+          sortField: 'jenis_kelamin',
+          titleClass: 'center aligned',
+          callback: 'getJenisKelaminById'
+        },
+        // {
+        //   name: 'sekolah.nama',
+        //   title: 'Sekolah Tujuan',
+        //   sortField: 'sekolah_id',
+        //   titleClass: 'center aligned'
+        // },
+        // {
+        //   name: '__slot:actions',
+        //   title: 'Actions',
+        //   titleClass: 'center aligned',
+        //   dataClass: 'center aligned'
+        // },
+      ],
+      sortOrder: [{
+        field: 'nama_siswa',
+        direction: 'asc'
+      }],
+      moreParams: {},
+      css: {
+        table: {
+          tableClass: 'table table-hover',
+          ascendingIcon: 'fa fa-chevron-up',
+          descendingIcon: 'fa fa-chevron-down'
+        },
+        pagination: {
+          wrapperClass: 'vuetable-pagination btn-group',
+          activeClass: 'active',
+          disabledClass: 'disabled',
+          pageClass: 'btn btn-light',
+          linkClass: 'btn btn-light',
+          icons: {
+            first: 'fa fa-angle-double-left',
+            prev: 'fa fa-angle-left',
+            next: 'fa fa-angle-right',
+            last: 'fa fa-angle-double-right'
+          }
+        }
       },
     }
   },
-  mounted() {
-    let app = this;
-
-    axios.get('api/master-sktm/'+this.$route.params.id)
-      .then(response => {
-        if (response.data.status == true && response.data.error == false) {
-          this.model.nama       = response.data.master_sktm.nama;
-          this.model.instansi   = response.data.master_sktm.instansi;
-          this.model.nilai      = response.data.master_sktm.nilai;
-          this.model.user_id    = response.data.master_sktm.user_id;
-          this.model.created_at = response.data.master_sktm.created_at;
-          this.model.updated_at = response.data.master_sktm.updated_at;
-
-          this.model.user       = response.data.master_sktm.user;
-
-          if (this.model.user === null) {
-            this.model.user = {
-              'id'    : this.model.user_id,
-              'name'  : ''
-            };
-          }
-        } else {
-          swal(
-            'Failed',
-            'Oops... '+response.data.message,
-            'error'
-          );
-
-          app.back();
-        }
-      })
-      .catch(function(response) {
-        swal(
-          'Not Found',
-          'Oops... Your page is not found.',
-          'error'
-        );
-
-        app.back();
-      });
-  },
   methods: {
-    edit() {
-      window.location = '#/admin/master-sktm/'+this.$route.params.id+'/edit';
+    getJenisKelaminById(value){
+      var found = this.jenis_kelamin.find((e) => {
+        return e.id == value
+      })
+
+      return found.label
+    },
+    getAgamaById(value){
+      var found = this.agama.find((e) => {
+        return e.id == value
+      })
+
+      return found.label
+    },
+    // apiUrl() {
+    //   '/api/passing-grade/'+this.$route.params.id;
+    // },
+    createRow() {
+      // window.location = '#/admin/siswa/create';
+    },
+    viewRow(rowData) {
+      // window.location = '#/admin/siswa/'+rowData.id;
+    },
+    editRow(rowData) {
+      // window.location = '#/admin/siswa/'+rowData.id+'/edit';
+    },
+    deleteRow(rowData) {
+      // let app = this;
+
+      // swal({
+      //   title: 'Are you sure?',
+      //   text: "You won't be able to revert this!",
+      //   type: 'warning',
+      //   showCancelButton: true,
+      //   confirmButtonColor: '#3085d6',
+      //   cancelButtonColor: '#d33',
+      //   confirmButtonText: 'Yes, delete it!',
+      //   cancelButtonText: 'No, cancel!',
+      //   confirmButtonClass: 'btn btn-success',
+      //   cancelButtonClass: 'btn btn-danger',
+      //   buttonsStyling: false,
+      //   reverseButtons: true
+      // }).then((result) => {
+      //   if (result.value) {
+      //     axios.delete('/api/siswa/'+rowData.id)
+      //       .then(function(response) {
+      //         if (response.data.status == true) {
+      //           app.$refs.vuetable.reload();
+
+      //           swal(
+      //             'Deleted',
+      //             'Yeah!!! Your data has been deleted.',
+      //             'success'
+      //           );
+      //         } else {
+      //           swal(
+      //             'Failed',
+      //             'Oops... Failed to delete data.',
+      //             'error'
+      //           );
+      //         }
+      //       })
+      //       .catch(function(response) {
+      //         swal(
+      //           'Not Found',
+      //           'Oops... Your page is not found.',
+      //           'error'
+      //         );
+      //       });
+      //   } else if (result.dismiss === swal.DismissReason.cancel) {
+      //     swal(
+      //       'Cancelled',
+      //       'Your data is safe.',
+      //       'error'
+      //     );
+      //   }
+      // });
     },
     back() {
-      window.location = '#/admin/master-sktm';
+      window.location = '#/admin/passing-grade';
+    },
+    onPaginationData(paginationData) {
+      this.$refs.pagination.setPaginationData(paginationData);
+      this.$refs.paginationInfo.setPaginationData(paginationData);
+    },
+    onChangePage(page) {
+      this.$refs.vuetable.changePage(page);
+    },
+    onLoading: function() {
+      this.loading = true;
+    },
+    onLoaded: function() {
+      this.loading = false;
+    }
+  },
+  events: {
+    'filter-set' (filterText) {
+      this.moreParams = {
+        filter: filterText
+      }
+
+      Vue.nextTick(() => this.$refs.vuetable.refresh())
+    },
+    'filter-reset'() {
+      this.moreParams = {
+        //
+      }
+
+      Vue.nextTick(() => this.$refs.vuetable.refresh())
     }
   }
 }
