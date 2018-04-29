@@ -1,4 +1,6 @@
-<?php namespace Bantenprov\PassingGrade;
+<?php
+
+namespace Bantenprov\PassingGrade;
 
 use Illuminate\Support\ServiceProvider;
 use Bantenprov\PassingGrade\Console\Commands\PassingGradeCommand;
@@ -11,7 +13,6 @@ use Bantenprov\PassingGrade\Console\Commands\PassingGradeCommand;
  */
 class PassingGradeServiceProvider extends ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -26,13 +27,15 @@ class PassingGradeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Bootstrap handles
         $this->routeHandle();
         $this->configHandle();
         $this->langHandle();
         $this->viewHandle();
         $this->assetHandle();
         $this->migrationHandle();
+        $this->publicHandle();
+        $this->seedHandle();
+        $this->publishHandle();
     }
 
     /**
@@ -67,6 +70,23 @@ class PassingGradeServiceProvider extends ServiceProvider
     }
 
     /**
+     * Loading and publishing package's config
+     *
+     * @return void
+     */
+    protected function configHandle($publish = '')
+    {
+        $packageConfigPath = __DIR__.'/config';
+        $appConfigPath     = config_path('bantenprov/passing-grade');
+
+        $this->mergeConfigFrom($packageConfigPath.'/passing-grade.php', 'passing-grade');
+
+        $this->publishes([
+            $packageConfigPath.'/passing-grade.php' => $appConfigPath.'/passing-grade.php',
+        ], $publish ? $publish : 'passing-grade-config');
+    }
+
+    /**
      * Loading package routes
      *
      * @return void
@@ -77,28 +97,11 @@ class PassingGradeServiceProvider extends ServiceProvider
     }
 
     /**
-     * Loading and publishing package's config
-     *
-     * @return void
-     */
-    protected function configHandle()
-    {
-        $packageConfigPath = __DIR__.'/config/config.php';
-        $appConfigPath     = config_path('passing-grade.php');
-
-        $this->mergeConfigFrom($packageConfigPath, 'passing-grade');
-
-        $this->publishes([
-            $packageConfigPath => $appConfigPath,
-        ], 'config');
-    }
-
-    /**
      * Loading and publishing package's translations
      *
      * @return void
      */
-    protected function langHandle()
+    protected function langHandle($publish = '')
     {
         $packageTranslationsPath = __DIR__.'/resources/lang';
 
@@ -106,7 +109,7 @@ class PassingGradeServiceProvider extends ServiceProvider
 
         $this->publishes([
             $packageTranslationsPath => resource_path('lang/vendor/passing-grade'),
-        ], 'lang');
+        ], $publish ? $publish : 'passing-grade-lang');
     }
 
     /**
@@ -114,7 +117,7 @@ class PassingGradeServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function viewHandle()
+    protected function viewHandle($publish = '')
     {
         $packageViewsPath = __DIR__.'/resources/views';
 
@@ -122,7 +125,7 @@ class PassingGradeServiceProvider extends ServiceProvider
 
         $this->publishes([
             $packageViewsPath => resource_path('views/vendor/passing-grade'),
-        ], 'views');
+        ], $publish ? $publish : 'passing-grade-views');
     }
 
     /**
@@ -130,13 +133,13 @@ class PassingGradeServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function assetHandle()
+    protected function assetHandle($publish = '')
     {
         $packageAssetsPath = __DIR__.'/resources/assets';
 
         $this->publishes([
-            $packageAssetsPath => public_path('vendor/passing-grade'),
-        ], 'public');
+            $packageAssetsPath => resource_path('assets'),
+        ], $publish ? $publish : 'passing-grade-assets');
     }
 
     /**
@@ -144,7 +147,7 @@ class PassingGradeServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function migrationHandle()
+    protected function migrationHandle($publish = '')
     {
         $packageMigrationsPath = __DIR__.'/database/migrations';
 
@@ -152,6 +155,53 @@ class PassingGradeServiceProvider extends ServiceProvider
 
         $this->publishes([
             $packageMigrationsPath => database_path('migrations')
-        ], 'migrations');
+        ], $publish ? $publish : 'passing-grade-migrations');
+    }
+
+    /**
+     * Publishing package's publics (JavaScript, CSS, images...)
+     *
+     * @return void
+     */
+    public function publicHandle($publish = '')
+    {
+        $packagePublicPath = __DIR__.'/public';
+
+        $this->publishes([
+            $packagePublicPath => base_path('public')
+        ], $publish ? $publish : 'passing-grade-public');
+    }
+
+    /**
+     * Publishing package's seeds
+     *
+     * @return void
+     */
+    public function seedHandle($publish = '')
+    {
+        $packageSeedPath = __DIR__.'/database/seeds';
+
+        $this->publishes([
+            $packageSeedPath => base_path('database/seeds')
+        ], $publish ? $publish : 'passing-grade-seeds');
+    }
+
+    /**
+     * Publishing package's all files
+     *
+     * @return void
+     */
+    public function publishHandle()
+    {
+        $publish = 'passing-grade-publish';
+
+        $this->routeHandle($publish);
+        $this->configHandle($publish);
+        $this->langHandle($publish);
+        $this->viewHandle($publish);
+        $this->assetHandle($publish);
+        // $this->migrationHandle($publish);
+        $this->publicHandle($publish);
+        $this->seedHandle($publish);
     }
 }
