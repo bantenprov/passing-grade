@@ -202,6 +202,6 @@ class PassingGradeServiceProvider extends ServiceProvider
         $this->assetHandle($publish);
         // $this->migrationHandle($publish);
         $this->publicHandle($publish);
-        $this->seedHandle($publish);
+        // $this->seedHandle($publish);
     }
 }
