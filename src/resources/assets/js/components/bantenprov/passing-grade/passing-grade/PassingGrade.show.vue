@@ -87,23 +87,6 @@ export default {
   data() {
     return {
       loading: true,
-
-      jenis_kelamin: [
-        {id: 1, label: 'Laki-laki'},
-        {id: 2, label: 'Perempuan'}
-      ],
-      selectedJenisKelamin: {id: "-", label: 'Pilih Salah Satu'},
-
-      agama: [
-        {id: 1, label: 'Islam'},
-        {id: 2, label: 'Kristen Protestan'},
-        {id: 3, label: 'Kristen Katolik'},
-        {id: 4, label: 'Hindu'},
-        {id: 5, label: 'Buddha'},
-        {id: 6, label: 'Khonghucu'}
-      ],
-      selectedAgama: {id: "-", label: 'Pilih Salah Satu'},
-
       title: 'View Passing Grade',
       fields: [
         {
@@ -169,9 +152,36 @@ export default {
           }
         }
       },
+      jenis_kelamin: [
+        {id: 1, label: 'Laki-laki'},
+        {id: 2, label: 'Perempuan'}
+      ],
+      selectedJenisKelamin: {id: "-", label: 'Pilih Salah Satu'},
+      agama: [
+        {id: 1, label: 'Islam'},
+        {id: 2, label: 'Kristen Protestan'},
+        {id: 3, label: 'Kristen Katolik'},
+        {id: 4, label: 'Hindu'},
+        {id: 5, label: 'Buddha'},
+        {id: 6, label: 'Khonghucu'}
+      ],
+      selectedAgama: {id: "-", label: 'Pilih Salah Satu'},
     }
   },
   methods: {
+    onPaginationData(paginationData) {
+      this.$refs.pagination.setPaginationData(paginationData);
+      this.$refs.paginationInfo.setPaginationData(paginationData);
+    },
+    onChangePage(page) {
+      this.$refs.vuetable.changePage(page);
+    },
+    onLoading: function() {
+      this.loading = true;
+    },
+    onLoaded: function() {
+      this.loading = false;
+    },
     getJenisKelaminById(value){
       var found = this.jenis_kelamin.find((e) => {
         return e.id == value
@@ -189,82 +199,8 @@ export default {
     // apiUrl() {
     //   '/api/passing-grade/'+this.$route.params.id;
     // },
-    createRow() {
-      // window.location = '#/admin/siswa/create';
-    },
-    viewRow(rowData) {
-      // window.location = '#/admin/siswa/'+rowData.id;
-    },
-    editRow(rowData) {
-      // window.location = '#/admin/siswa/'+rowData.id+'/edit';
-    },
-    deleteRow(rowData) {
-      // let app = this;
-
-      // swal({
-      //   title: 'Are you sure?',
-      //   text: "You won't be able to revert this!",
-      //   type: 'warning',
-      //   showCancelButton: true,
-      //   confirmButtonColor: '#3085d6',
-      //   cancelButtonColor: '#d33',
-      //   confirmButtonText: 'Yes, delete it!',
-      //   cancelButtonText: 'No, cancel!',
-      //   confirmButtonClass: 'btn btn-success',
-      //   cancelButtonClass: 'btn btn-danger',
-      //   buttonsStyling: false,
-      //   reverseButtons: true
-      // }).then((result) => {
-      //   if (result.value) {
-      //     axios.delete('/api/siswa/'+rowData.id)
-      //       .then(function(response) {
-      //         if (response.data.status == true) {
-      //           app.$refs.vuetable.reload();
-
-      //           swal(
-      //             'Deleted',
-      //             'Yeah!!! Your data has been deleted.',
-      //             'success'
-      //           );
-      //         } else {
-      //           swal(
-      //             'Failed',
-      //             'Oops... Failed to delete data.',
-      //             'error'
-      //           );
-      //         }
-      //       })
-      //       .catch(function(response) {
-      //         swal(
-      //           'Not Found',
-      //           'Oops... Your page is not found.',
-      //           'error'
-      //         );
-      //       });
-      //   } else if (result.dismiss === swal.DismissReason.cancel) {
-      //     swal(
-      //       'Cancelled',
-      //       'Your data is safe.',
-      //       'error'
-      //     );
-      //   }
-      // });
-    },
     back() {
       window.location = '#/admin/passing-grade';
-    },
-    onPaginationData(paginationData) {
-      this.$refs.pagination.setPaginationData(paginationData);
-      this.$refs.paginationInfo.setPaginationData(paginationData);
-    },
-    onChangePage(page) {
-      this.$refs.vuetable.changePage(page);
-    },
-    onLoading: function() {
-      this.loading = true;
-    },
-    onLoaded: function() {
-      this.loading = false;
     }
   },
   events: {

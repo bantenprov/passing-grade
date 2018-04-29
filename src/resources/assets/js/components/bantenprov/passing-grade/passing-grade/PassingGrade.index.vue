@@ -2,14 +2,6 @@
   <div class="card">
     <div class="card-header">
       <i class="fa fa-table" aria-hidden="true"></i> {{ title }}
-
-      <!-- <ul class="nav nav-pills card-header-pills pull-right">
-        <li class="nav-item">
-          <button class="btn btn-primary btn-sm" role="button" @click="createRow">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-          </button>
-        </li>
-      </ul> -->
     </div>
 
     <div class="card-body">
@@ -38,18 +30,9 @@
           @vuetable:loaded="onLoaded">
           <template slot="actions" slot-scope="props">
             <div class="btn-group pull-right" role="group" style="display:flex;">
-              <!-- <button class="btn btn-info btn-sm" role="button" @click="viewRow(props.rowData)">
-                <span class="fa fa-eye"></span>
-              </button> -->
               <button class="btn btn-info btn-sm" role="button" @click="viewRow(props.rowData)">
-                <span class="fa fa-eye"></span> Lihat
+                <span class="fa fa-eye"></span>
               </button>
-              <!-- <button class="btn btn-warning btn-sm" role="button" @click="editRow(props.rowData)">
-                <span class="fa fa-pencil"></span>
-              </button> -->
-              <!-- <button class="btn btn-danger btn-sm" role="button" @click="deleteRow(props.rowData)">
-                <span class="fa fa-trash"></span>
-              </button> -->
             </div>
           </template>
         </vuetable>
@@ -95,12 +78,6 @@ export default {
           titleClass: 'center aligned',
           dataClass: 'right aligned'
         },
-        // {
-        //   name: 'npsn',
-        //   title: 'NPSN',
-        //   sortField: 'npsn',
-        //   titleClass: 'center aligned'
-        // },
         {
           name: 'nama',
           title: 'Nama Sekolah',
@@ -125,18 +102,6 @@ export default {
           sortField: 'jumlah_pendaftar',
           titleClass: 'center aligned'
         },
-        // {
-        //   name: 'no_telp',
-        //   title: 'No Telepon',
-        //   sortField: 'no_telp',
-        //   titleClass: 'center aligned'
-        // },
-        // {
-        //   name: 'master_zona.label',
-        //   title: 'Zona',
-        //   sortField: 'kode_zona',
-        //   titleClass: 'center aligned'
-        // },
         {
           name: '__slot:actions',
           title: 'Actions',
@@ -185,67 +150,9 @@ export default {
     onLoaded: function() {
       this.loading = false;
     },
-    createRow() {
-      // window.location = '#/admin/passing-grade/create';
-    },
     viewRow(rowData) {
       window.location = '#/admin/passing-grade/'+rowData.id;
     },
-    editRow(rowData) {
-      // window.location = '#/admin/passing-grade/'+rowData.id+'/edit';
-    },
-    deleteRow(rowData) {
-      // let app = this;
-
-      // swal({
-      //   title: 'Are you sure?',
-      //   text: 'You won\'t be able to revert this!',
-      //   type: 'warning',
-      //   showCancelButton: true,
-      //   confirmButtonColor: '#3085d6',
-      //   cancelButtonColor: '#d33',
-      //   confirmButtonText: 'Yes, delete it!',
-      //   cancelButtonText: 'No, cancel!',
-      //   confirmButtonClass: 'btn btn-success',
-      //   cancelButtonClass: 'btn btn-danger',
-      //   buttonsStyling: false,
-      //   reverseButtons: true
-      // }).then((result) => {
-      //   if (result.value) {
-      //     axios.delete('/api/passing-grade/'+rowData.id)
-      //       .then(function(response) {
-      //         if (response.data.status == true) {
-      //           app.$refs.vuetable.reload();
-
-      //           swal(
-      //             'Deleted',
-      //             'Yeah!!! Your data has been deleted.',
-      //             'success'
-      //           );
-      //         } else {
-      //           swal(
-      //             'Failed',
-      //             'Oops... Failed to delete data.',
-      //             'error'
-      //           );
-      //         }
-      //       })
-      //       .catch(function(response) {
-      //         swal(
-      //           'Not Found',
-      //           'Oops... Your page is not found.',
-      //           'error'
-      //         );
-      //       });
-      //   } else if (result.dismiss === swal.DismissReason.cancel) {
-      //     swal(
-      //       'Cancelled',
-      //       'Your data is safe.',
-      //       'error'
-      //     );
-      //   }
-      // });
-    }
   },
   events: {
     'filter-set' (filterText) {
