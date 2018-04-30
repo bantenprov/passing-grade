@@ -50,28 +50,10 @@ $ git clone https://github.com/bantenprov/passing-grade.git
     //...
 ```
 
-#### Lakukan migrate :
-
-```bash
-$ php artisan migrate
-```
-
 #### Lakukan publish semua komponen :
 
 ```bash
 $ php artisan vendor:publish --tag=passing-grade-publish
-```
-
-#### Lakukan auto dump :
-
-```bash
-$ composer dump-autoload
-```
-
-#### Lakukan seeding :
-
-```bash
-$ php artisan db:seed --class=BantenprovPassingGradeSeeder
 ```
 
 #### Edit menu `resources/assets/js/menu.js`
