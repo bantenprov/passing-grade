@@ -102,7 +102,7 @@ class PassingGradeController extends Controller
 
         $perPage    = request()->has('per_page') ? (int) request()->per_page : null;
 
-        $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user'])->paginate($perPage);
+        $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user', 'akademik', 'nilai'])->paginate($perPage);
 
         foreach($response as $siswa){
             if (isset($siswa->prodi_sekolah->program_keahlian)) {

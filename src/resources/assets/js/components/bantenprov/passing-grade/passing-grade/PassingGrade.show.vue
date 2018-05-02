@@ -5,9 +5,6 @@
 
       <ul class="nav nav-pills card-header-pills pull-right">
         <li class="nav-item">
-          <!-- <button class="btn btn-primary btn-sm" role="button" @click="createRow">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-          </button> -->
           <button class="btn btn-primary btn-sm" role="button" @click="back">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
@@ -16,6 +13,8 @@
     </div>
 
     <div class="card-body">
+      <p>Sekolah: <strong>{{ sub_title }}</strong></p>
+
       <div class="d-flex justify-content-between align-items-center">
         <vuetable-filter-bar></vuetable-filter-bar>
       </div>
@@ -29,7 +28,7 @@
 
       <div class="table-responsive">
         <vuetable ref="vuetable"
-          api-url="apiUrl"
+          :api-url="api_url"
           :fields="fields"
           :sort-order="sortOrder"
           :css="css.table"
@@ -88,6 +87,8 @@ export default {
     return {
       loading: true,
       title: 'View Passing Grade',
+      sub_title: '',
+      api_url: '/api/passing-grade/'+this.$route.params.id,
       fields: [
         {
           name: '__sequence',
@@ -108,24 +109,35 @@ export default {
           titleClass: 'center aligned'
         },
         {
-          name: 'jenis_kelamin',
-          title: 'Jenis Kelamin',
-          sortField: 'jenis_kelamin',
-          titleClass: 'center aligned',
-          callback: 'getJenisKelaminById'
+          name: 'akademik.bahasa_indonesia',
+          title: 'B.Ind',
+          sortField: 'akademik.bahasa_indonesia',
+          titleClass: 'center aligned'
         },
-        // {
-        //   name: 'sekolah.nama',
-        //   title: 'Sekolah Tujuan',
-        //   sortField: 'sekolah_id',
-        //   titleClass: 'center aligned'
-        // },
-        // {
-        //   name: '__slot:actions',
-        //   title: 'Actions',
-        //   titleClass: 'center aligned',
-        //   dataClass: 'center aligned'
-        // },
+        {
+          name: 'akademik.bahasa_inggris',
+          title: 'B.Ing',
+          sortField: 'akademik.bahasa_inggris',
+          titleClass: 'center aligned'
+        },
+        {
+          name: 'akademik.matematika',
+          title: 'MTK',
+          sortField: 'akademik.matematika',
+          titleClass: 'center aligned'
+        },
+        {
+          name: 'akademik.ipa',
+          title: 'IPA',
+          sortField: 'akademik.ipa',
+          titleClass: 'center aligned'
+        },
+        {
+          name: 'nilai.akademik',
+          title: 'Akademik',
+          sortField: 'nilai.akademik',
+          titleClass: 'center aligned'
+        },
       ],
       sortOrder: [{
         field: 'nama_siswa',
@@ -152,21 +164,34 @@ export default {
           }
         }
       },
-      jenis_kelamin: [
-        {id: 1, label: 'Laki-laki'},
-        {id: 2, label: 'Perempuan'}
-      ],
-      selectedJenisKelamin: {id: "-", label: 'Pilih Salah Satu'},
-      agama: [
-        {id: 1, label: 'Islam'},
-        {id: 2, label: 'Kristen Protestan'},
-        {id: 3, label: 'Kristen Katolik'},
-        {id: 4, label: 'Hindu'},
-        {id: 5, label: 'Buddha'},
-        {id: 6, label: 'Khonghucu'}
-      ],
-      selectedAgama: {id: "-", label: 'Pilih Salah Satu'},
     }
+  },
+  mounted() {
+    let app = this;
+
+    axios.get('api/sekolah/' + this.$route.params.id)
+      .then(response => {
+        if (response.data.status == true && response.data.error == false) {
+          this.sub_title = response.data.sekolah.nama;
+        } else {
+          swal(
+            'Failed',
+            'Oops... '+response.data.message,
+            'error'
+          );
+
+          app.back();
+        }
+      })
+      .catch(function(response) {
+        swal(
+          'Not Found',
+          'Oops... Your page is not found.',
+          'error'
+        );
+
+        app.back();
+      });
   },
   methods: {
     onPaginationData(paginationData) {
@@ -196,9 +221,6 @@ export default {
 
       return found.label
     },
-    // apiUrl() {
-    //   '/api/passing-grade/'+this.$route.params.id;
-    // },
     back() {
       window.location = '#/admin/passing-grade';
     }
