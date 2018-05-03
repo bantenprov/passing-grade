@@ -18,7 +18,7 @@
 
       <div class="table-responsive">
         <vuetable ref="vuetable"
-          api-url="/api/passing-grade"
+          :api-url="api_url"
           :fields="fields"
           :sort-order="sortOrder"
           :css="css.table"
@@ -71,6 +71,7 @@ export default {
     return {
       loading: true,
       title: 'Passing Grade',
+      api_url: "/api/passing-grade",
       fields: [
         {
           name: '__sequence',
