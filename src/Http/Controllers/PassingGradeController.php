@@ -5,6 +5,7 @@ namespace Bantenprov\PassingGrade\Http\Controllers;
 /* Require */
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Bantenprov\PassingGrade\Facades\PassingGradeFacade;
 
 /* Models */
@@ -82,6 +83,7 @@ class PassingGradeController extends Controller
     {
         if (request()->has('sort')) {
             list($sortCol, $sortDir) = explode('|', request()->sort);
+
             $query = $this->siswa->orderBy($sortCol, $sortDir);
         } else {
             $query = $this->siswa->orderBy('id', 'asc');
@@ -90,6 +92,7 @@ class PassingGradeController extends Controller
         if ($request->exists('filter')) {
             $query->where(function($q) use($request) {
                 $value = "%{$request->filter}%";
+
                 $q->where('nomor_un', 'like', $value)
                     ->orWhere('nik', 'like', $value)
                     ->orWhere('nama_siswa', 'like', $value)
