@@ -13,7 +13,7 @@
     </div>
 
     <div class="card-body">
-      <p>Sekolah: <strong>{{ sub_title }}</strong></p>
+      <p><strong>Sekolah:</strong> {{ sub_title }}</p>
 
       <div class="d-flex justify-content-between align-items-center">
         <vuetable-filter-bar></vuetable-filter-bar>
@@ -81,7 +81,7 @@ import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePagination
 
 export default {
   components: {
-    VuetablePaginationInfo
+    VuetablePaginationInfo,
   },
   data() {
     return {
@@ -94,49 +94,49 @@ export default {
           name: '__sequence',
           title: '#',
           titleClass: 'center aligned',
-          dataClass: 'right aligned'
+          dataClass: 'right aligned',
         },
         {
           name: 'nomor_un',
           title: 'Nomor UN',
           sortField: 'nomor_un',
-          titleClass: 'center aligned'
+          titleClass: 'center aligned',
         },
         {
           name: 'nama_siswa',
           title: 'Nama Siswa',
           sortField: 'nama_siswa',
-          titleClass: 'center aligned'
+          titleClass: 'center aligned',
         },
         {
           name: 'akademik.bahasa_indonesia',
           title: 'B.Ind',
-          sortField: 'akademik.bahasa_indonesia',
-          titleClass: 'center aligned'
+          // sortField: 'akademik.bahasa_indonesia',
+          titleClass: 'center aligned',
         },
         {
           name: 'akademik.bahasa_inggris',
           title: 'B.Ing',
-          sortField: 'akademik.bahasa_inggris',
-          titleClass: 'center aligned'
+          // sortField: 'akademik.bahasa_inggris',
+          titleClass: 'center aligned',
         },
         {
           name: 'akademik.matematika',
           title: 'MTK',
-          sortField: 'akademik.matematika',
-          titleClass: 'center aligned'
+          // sortField: 'akademik.matematika',
+          titleClass: 'center aligned',
         },
         {
           name: 'akademik.ipa',
           title: 'IPA',
-          sortField: 'akademik.ipa',
-          titleClass: 'center aligned'
+          // sortField: 'akademik.ipa',
+          titleClass: 'center aligned',
         },
         {
           name: 'nilai.akademik',
           title: 'Akademik',
-          sortField: 'nilai.akademik',
-          titleClass: 'center aligned'
+          // sortField: 'nilai.akademik',
+          titleClass: 'center aligned',
         },
       ],
       sortOrder: [{
@@ -209,17 +209,17 @@ export default {
     },
     getJenisKelaminById(value){
       var found = this.jenis_kelamin.find((e) => {
-        return e.id == value
+        return e.id == value;
       })
 
-      return found.label
+      return found.label;
     },
     getAgamaById(value){
       var found = this.agama.find((e) => {
-        return e.id == value
+        return e.id == value;
       })
 
-      return found.label
+      return found.label;
     },
     back() {
       window.location = '#/admin/passing-grade';
@@ -228,18 +228,18 @@ export default {
   events: {
     'filter-set' (filterText) {
       this.moreParams = {
-        filter: filterText
-      }
+        filter: filterText,
+      };
 
-      Vue.nextTick(() => this.$refs.vuetable.refresh())
+      Vue.nextTick(() => this.$refs.vuetable.refresh());
     },
-    'filter-reset'() {
+    'filter-reset' () {
       this.moreParams = {
         //
-      }
+      };
 
-      Vue.nextTick(() => this.$refs.vuetable.refresh())
-    }
-  }
+      Vue.nextTick(() => this.$refs.vuetable.refresh());
+    },
+  },
 }
 </script>

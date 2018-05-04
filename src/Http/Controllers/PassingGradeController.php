@@ -52,7 +52,8 @@ class PassingGradeController extends Controller
 
             $query = $this->sekolah->orderBy($sortCol, $sortDir);
         } else {
-            $query = $this->sekolah->orderBy('id', 'asc');
+            $query = $this->sekolah
+                ->orderBy('npsn', 'asc');
         }
 
         if ($request->exists('filter')) {
@@ -86,7 +87,8 @@ class PassingGradeController extends Controller
 
             $query = $this->siswa->orderBy($sortCol, $sortDir);
         } else {
-            $query = $this->siswa->orderBy('id', 'asc');
+            $query = $this->siswa
+                ->orderBy('nomor_un', 'asc');
         }
 
         if ($request->exists('filter')) {
@@ -107,7 +109,7 @@ class PassingGradeController extends Controller
 
         $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user', 'akademik', 'nilai'])->paginate($perPage);
 
-        foreach($response as $siswa){
+        foreach ($response as $siswa) {
             if (isset($siswa->prodi_sekolah->program_keahlian)) {
                 $siswa->prodi_sekolah->program_keahlian;
             }

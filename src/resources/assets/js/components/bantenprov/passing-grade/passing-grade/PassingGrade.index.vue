@@ -65,61 +65,63 @@ import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePagination
 
 export default {
   components: {
-    VuetablePaginationInfo
+    VuetablePaginationInfo,
   },
   data() {
     return {
       loading: true,
       title: 'Passing Grade',
-      api_url: "/api/passing-grade",
+      api_url: '/api/passing-grade',
       fields: [
         {
           name: '__sequence',
           title: '#',
           titleClass: 'center aligned',
-          dataClass: 'right aligned'
+          dataClass: 'right aligned',
         },
         {
           name: 'nama',
           title: 'Nama Sekolah',
           sortField: 'nama',
-          titleClass: 'center aligned'
+          titleClass: 'center aligned',
         },
         {
           name: 'jalur_umum',
           title: 'Jalur Umum',
-          sortField: 'jalur_umum',
-          titleClass: 'center aligned'
+          // sortField: 'jalur_umum',
+          titleClass: 'center aligned',
         },
         {
           name: 'jalur_prestasi',
           title: 'Jalur Prestasi',
-          sortField: 'jalur_prestasi',
-          titleClass: 'center aligned'
+          // sortField: 'jalur_prestasi',
+          titleClass: 'center aligned',
         },
         {
           name: 'jumlah_pendaftar',
           title: 'Jumlah Pendaftar',
-          sortField: 'jumlah_pendaftar',
-          titleClass: 'center aligned'
+          // sortField: 'jumlah_pendaftar',
+          titleClass: 'center aligned',
         },
         {
           name: '__slot:actions',
           title: 'Actions',
           titleClass: 'center aligned',
-          dataClass: 'center aligned'
+          dataClass: 'center aligned',
         },
       ],
-      sortOrder: [{
-        field: 'nama',
-        direction: 'asc'
-      }],
+      sortOrder: [
+        {
+          field: 'npsn',
+          direction: 'asc',
+        },
+      ],
       moreParams: {},
       css: {
         table: {
           tableClass: 'table table-hover',
           ascendingIcon: 'fa fa-chevron-up',
-          descendingIcon: 'fa fa-chevron-down'
+          descendingIcon: 'fa fa-chevron-down',
         },
         pagination: {
           wrapperClass: 'vuetable-pagination btn-group',
@@ -131,10 +133,10 @@ export default {
             first: 'fa fa-angle-double-left',
             prev: 'fa fa-angle-left',
             next: 'fa fa-angle-right',
-            last: 'fa fa-angle-double-right'
-          }
-        }
-      }
+            last: 'fa fa-angle-double-right',
+          },
+        },
+      },
     }
   },
   methods: {
@@ -158,18 +160,18 @@ export default {
   events: {
     'filter-set' (filterText) {
       this.moreParams = {
-        filter: filterText
-      }
+        filter: filterText,
+      };
 
-      Vue.nextTick(() => this.$refs.vuetable.refresh())
+      Vue.nextTick(() => this.$refs.vuetable.refresh());
     },
-    'filter-reset'() {
+    'filter-reset' () {
       this.moreParams = {
         //
-      }
+      };
 
-      Vue.nextTick(() => this.$refs.vuetable.refresh())
-    }
-  }
+      Vue.nextTick(() => this.$refs.vuetable.refresh());
+    },
+  },
 }
 </script>
