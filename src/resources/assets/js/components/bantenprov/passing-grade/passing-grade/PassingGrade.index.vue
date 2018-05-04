@@ -116,7 +116,9 @@ export default {
           direction: 'asc',
         },
       ],
-      moreParams: {},
+      moreParams: {
+        //
+      },
       css: {
         table: {
           tableClass: 'table table-hover',

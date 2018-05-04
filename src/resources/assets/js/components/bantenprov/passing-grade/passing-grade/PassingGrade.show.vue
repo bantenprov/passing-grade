@@ -143,7 +143,9 @@ export default {
         field: 'nama_siswa',
         direction: 'asc'
       }],
-      moreParams: {},
+      moreParams: {
+        //
+      },
       css: {
         table: {
           tableClass: 'table table-hover',
@@ -206,20 +208,6 @@ export default {
     },
     onLoaded: function() {
       this.loading = false;
-    },
-    getJenisKelaminById(value){
-      var found = this.jenis_kelamin.find((e) => {
-        return e.id == value;
-      })
-
-      return found.label;
-    },
-    getAgamaById(value){
-      var found = this.agama.find((e) => {
-        return e.id == value;
-      })
-
-      return found.label;
     },
     back() {
       window.location = '#/admin/passing-grade';
