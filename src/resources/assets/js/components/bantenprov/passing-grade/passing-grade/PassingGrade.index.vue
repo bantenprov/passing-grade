@@ -156,7 +156,7 @@ export default {
       this.loading = false;
     },
     viewRow(rowData) {
-      window.location = '#/admin/passing-grade/'+rowData.id;
+      window.location = '#/dashboard/passing-grade/'+rowData.id;
     },
   },
   events: {

@@ -210,7 +210,7 @@ export default {
       this.loading = false;
     },
     back() {
-      window.location = '#/admin/passing-grade';
+      window.location = '#/dashboard/passing-grade';
     }
   },
   events: {
