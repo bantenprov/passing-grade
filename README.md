@@ -76,24 +76,6 @@ $ php artisan vendor:publish --tag=passing-grade-publish
 },
 ```
 
-```javascript
-{
-    name: 'Admin',
-    icon: 'fa fa-lock',
-    childType: 'collapse',
-    childItem: [
-        //...
-        // Passing Grade
-        {
-            name: 'Passing Grade',
-            link: '/admin/passing-grade',
-            icon: 'fa fa-angle-double-right'
-        },
-        //...
-    ]
-},
-```
-
 #### Tambahkan components `resources/assets/js/components.js` :
 
 ```javascript
@@ -149,30 +131,6 @@ Vue.component('passing-grade-pie-03', PassingGradePie03);
         {
             path: '/dashboard/passing-grade',
             components: {
-                main: resolve => require(['~/components/views/bantenprov/passing-grade/passing-grade/PassingGradeDashboard.vue'], resolve),
-                navbar: resolve => require(['~/components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
-            },
-            meta: {
-                title: "Passing Grade"
-            }
-        },
-        //...
-    ]
-},
-```
-
-```javascript
-{
-    path: '/admin',
-    redirect: '/admin/dashboard/home',
-    component: layout('Default'),
-    children: [
-        //...
-        // Passing Grade
-        {
-            path: '/admin/passing-grade',
-            components: {
                 main: resolve => require(['~/components/bantenprov/passing-grade/passing-grade/PassingGrade.index.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
                 sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
@@ -182,7 +140,7 @@ Vue.component('passing-grade-pie-03', PassingGradePie03);
             }
         },
         {
-            path: '/admin/passing-grade/:id',
+            path: '/dashboard/passing-grade/:id',
             components: {
                 main: resolve => require(['~/components/bantenprov/passing-grade/passing-grade/PassingGrade.show.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),

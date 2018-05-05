@@ -5,6 +5,7 @@ namespace Bantenprov\PassingGrade\Http\Controllers;
 /* Require */
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Bantenprov\PassingGrade\Facades\PassingGradeFacade;
 
 /* Models */
@@ -51,7 +52,8 @@ class PassingGradeController extends Controller
 
             $query = $this->sekolah->orderBy($sortCol, $sortDir);
         } else {
-            $query = $this->sekolah->orderBy('id', 'asc');
+            $query = $this->sekolah
+                ->orderBy('npsn', 'asc');
         }
 
         if ($request->exists('filter')) {
@@ -82,14 +84,17 @@ class PassingGradeController extends Controller
     {
         if (request()->has('sort')) {
             list($sortCol, $sortDir) = explode('|', request()->sort);
+
             $query = $this->siswa->orderBy($sortCol, $sortDir);
         } else {
-            $query = $this->siswa->orderBy('id', 'asc');
+            $query = $this->siswa
+                ->orderBy('nomor_un', 'asc');
         }
 
         if ($request->exists('filter')) {
             $query->where(function($q) use($request) {
                 $value = "%{$request->filter}%";
+
                 $q->where('nomor_un', 'like', $value)
                     ->orWhere('nik', 'like', $value)
                     ->orWhere('nama_siswa', 'like', $value)
@@ -104,7 +109,7 @@ class PassingGradeController extends Controller
 
         $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user', 'akademik', 'nilai'])->paginate($perPage);
 
-        foreach($response as $siswa){
+        foreach ($response as $siswa) {
             if (isset($siswa->prodi_sekolah->program_keahlian)) {
                 $siswa->prodi_sekolah->program_keahlian;
             }
