@@ -225,10 +225,10 @@ export default {
       window.location = '#/admin/seleksi/'+rowData.id;
     },
     viewRowGeneral(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id+'/general';
+      window.location = '#/admin/seleksi/'+rowData.id+'/umum';
     },
     viewRowAchievement(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id+'/achievement';
+      window.location = '#/admin/seleksi/'+rowData.id+'/prestasi';
     },
     editRow(rowData) {
       window.location = '#/admin/seleksi/'+rowData.id+'/edit';

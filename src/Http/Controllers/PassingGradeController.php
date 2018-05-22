@@ -103,9 +103,9 @@ class PassingGradeController extends Controller
             });
         }
 
-        if ($track == 'general') {
+        if ($track == 'umum') {
             $query->whereIn('kegiatan_id', ['12', '22']);
-        } else if ($track == 'achievement') {
+        } else if ($track == 'prestasi') {
             $query->whereIn('kegiatan_id', ['11', '21']);
         }
 
