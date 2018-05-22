@@ -80,7 +80,7 @@ class PassingGradeController extends Controller
      * @param  \App\Sekolah  $sekolah
      * @return \Illuminate\Http\Response
      */
-    public function show($id, Request $request)
+    public function show($id, $track = null, Request $request)
     {
         if (request()->has('sort')) {
             list($sortCol, $sortDir) = explode('|', request()->sort);
@@ -101,6 +101,12 @@ class PassingGradeController extends Controller
                     ->orWhere('no_kk', 'like', $value)
                     ->orWhere('nisn', 'like', $value);
             });
+        }
+
+        if ($track == 'general') {
+            $query->whereIn('kegiatan_id', ['12', '22']);
+        } else if ($track == 'achievement') {
+            $query->whereIn('kegiatan_id', ['11', '21']);
         }
 
         $query->where('sekolah_id', '=', $id);

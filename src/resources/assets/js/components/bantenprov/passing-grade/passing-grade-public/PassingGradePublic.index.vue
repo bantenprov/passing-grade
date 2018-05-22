@@ -5,16 +5,14 @@
 
       <ul class="nav nav-pills card-header-pills pull-right">
         <li class="nav-item">
-          <button class="btn btn-default btn-sm" role="button" @click="back">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
-          </button>
+          <!-- <button class="btn btn-primary btn-sm" role="button" @click="createRow">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </button> -->
         </li>
       </ul>
     </div>
 
     <div class="card-body">
-      <p><strong>Sekolah:</strong> {{ sub_title }}</p>
-
       <div class="d-flex justify-content-between align-items-center">
         <vuetable-filter-bar></vuetable-filter-bar>
       </div>
@@ -40,12 +38,15 @@
           @vuetable:loaded="onLoaded">
           <template slot="actions" slot-scope="props">
             <div class="btn-group pull-right" role="group" style="display:flex;">
-              <button class="btn btn-primary btn-sm" role="button" @click="createRow(props.rowData)">
-                <span class="fa fa-plus"></span> Terima
-              </button>
               <!-- <button class="btn btn-info btn-sm" role="button" @click="viewRow(props.rowData)">
                 <span class="fa fa-eye"></span>
               </button> -->
+              <button class="btn btn-info btn-sm" role="button" @click="viewRowGeneral(props.rowData)">
+                <span class="fa fa-eye"></span> Umum
+              </button>
+              <button class="btn btn-info btn-sm" role="button" @click="viewRowAchievement(props.rowData)">
+                <span class="fa fa-eye"></span> Prestasi
+              </button>
               <!-- <button class="btn btn-warning btn-sm" role="button" @click="editRow(props.rowData)">
                 <span class="fa fa-pencil"></span>
               </button> -->
@@ -89,9 +90,8 @@ export default {
   data() {
     return {
       loading: true,
-      title: 'View Passing Grade',
-      sub_title: '',
-      api_url: '/api/passing-grade/'+this.$route.params.id+'/'+this.$route.params.track,
+      title: 'Passing Grade',
+      api_url: '/api/passing-grade-public',
       fields: [
         {
           name: '__sequence',
@@ -100,45 +100,27 @@ export default {
           dataClass: 'right aligned',
         },
         {
-          name: 'nomor_un',
-          title: 'Nomor UN',
-          sortField: 'nomor_un',
+          name: 'nama',
+          title: 'Nama Sekolah',
+          sortField: 'nama',
           titleClass: 'center aligned',
         },
         {
-          name: 'nama_siswa',
-          title: 'Nama Siswa',
-          sortField: 'nama_siswa',
+          name: 'jalur_umum',
+          title: 'Jalur Umum',
+          // sortField: 'jalur_umum',
           titleClass: 'center aligned',
         },
         {
-          name: 'akademik.bahasa_indonesia',
-          title: 'B.Ind',
-          // sortField: 'akademik.bahasa_indonesia',
+          name: 'jalur_prestasi',
+          title: 'Jalur Prestasi',
+          // sortField: 'jalur_prestasi',
           titleClass: 'center aligned',
         },
         {
-          name: 'akademik.bahasa_inggris',
-          title: 'B.Ing',
-          // sortField: 'akademik.bahasa_inggris',
-          titleClass: 'center aligned',
-        },
-        {
-          name: 'akademik.matematika',
-          title: 'MTK',
-          // sortField: 'akademik.matematika',
-          titleClass: 'center aligned',
-        },
-        {
-          name: 'akademik.ipa',
-          title: 'IPA',
-          // sortField: 'akademik.ipa',
-          titleClass: 'center aligned',
-        },
-        {
-          name: 'nilai.akademik',
-          title: 'Akademik',
-          // sortField: 'nilai.akademik',
+          name: 'jumlah_pendaftar',
+          title: 'Jumlah Pendaftar',
+          // sortField: 'jumlah_pendaftar',
           titleClass: 'center aligned',
         },
         {
@@ -148,10 +130,12 @@ export default {
           dataClass: 'center aligned',
         },
       ],
-      sortOrder: [{
-        field: 'nama_siswa',
-        direction: 'asc'
-      }],
+      sortOrder: [
+        {
+          field: 'npsn',
+          direction: 'asc',
+        },
+      ],
       moreParams: {
         //
       },
@@ -159,7 +143,7 @@ export default {
         table: {
           tableClass: 'table table-hover',
           ascendingIcon: 'fa fa-chevron-up',
-          descendingIcon: 'fa fa-chevron-down'
+          descendingIcon: 'fa fa-chevron-down',
         },
         pagination: {
           wrapperClass: 'vuetable-pagination btn-group',
@@ -171,38 +155,11 @@ export default {
             first: 'fa fa-angle-double-left',
             prev: 'fa fa-angle-left',
             next: 'fa fa-angle-right',
-            last: 'fa fa-angle-double-right'
-          }
-        }
+            last: 'fa fa-angle-double-right',
+          },
+        },
       },
     }
-  },
-  mounted() {
-    let app = this;
-
-    axios.get('api/sekolah/' + this.$route.params.id)
-      .then(response => {
-        if (response.data.status == true && response.data.error == false) {
-          this.sub_title = response.data.sekolah.nama;
-        } else {
-          swal(
-            'Failed',
-            'Oops... '+response.data.message,
-            'error'
-          );
-
-          app.back();
-        }
-      })
-      .catch(function(response) {
-        swal(
-          'Not Found',
-          'Oops... Your page is not found.',
-          'error'
-        );
-
-        app.back();
-      });
   },
   methods: {
     onPaginationData(paginationData) {
@@ -218,20 +175,20 @@ export default {
     onLoaded: function() {
       this.loading = false;
     },
-    createRow(rowData) {
-      window.location = '#/admin/seleksi/create/'+rowData.id;
+    createRow() {
+      window.location = '#/passing-grade-public/create';
     },
     viewRow(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id;
+      window.location = '#/passing-grade-public/'+rowData.id;
     },
     viewRowGeneral(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id+'/general';
+      window.location = '#/passing-grade-public/'+rowData.id+'/general';
     },
     viewRowAchievement(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id+'/achievement';
+      window.location = '#/passing-grade-public/'+rowData.id+'/achievement';
     },
     editRow(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id+'/edit';
+      window.location = '#/passing-grade-public/'+rowData.id+'/edit';
     },
     deleteRow(rowData) {
       let app = this;
@@ -251,7 +208,7 @@ export default {
         reverseButtons: true,
       }).then((result) => {
         if (result.value) {
-          axios.delete('/api/seleksi/'+rowData.id)
+          axios.delete('/api/passing-grade-public/'+rowData.id)
             .then(function(response) {
               if (response.data.status == true && response.data.error == false) {
                 app.$refs.vuetable.reload();
@@ -285,9 +242,6 @@ export default {
         }
       });
     },
-    back() {
-      window.location = '#/admin/passing-grade';
-    }
   },
   events: {
     'filter-set' (filterText) {
@@ -297,7 +251,7 @@ export default {
 
       Vue.nextTick(() => this.$refs.vuetable.refresh());
     },
-    'filter-reset' () {
+    'filter-reset'() {
       this.moreParams = {
         //
       };

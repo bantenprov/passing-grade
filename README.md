@@ -17,19 +17,19 @@ Passing Grade
 - Development snapshot
 
 ```bash
-$ composer require bantenprov/passing-grade:dev-master
+composer require bantenprov/passing-grade:dev-master
 ```
 
 - Latest release:
 
 ```bash
-$ composer require bantenprov/passing-grade
+composer require bantenprov/passing-grade
 ```
 
 ### Download via github
 
 ```bash
-$ git clone https://github.com/bantenprov/passing-grade.git
+git clone https://github.com/bantenprov/passing-grade.git
 ```
 
 #### Edit `config/app.php` :
@@ -48,12 +48,42 @@ $ git clone https://github.com/bantenprov/passing-grade.git
     //...
     Bantenprov\PassingGrade\PassingGradeServiceProvider::class,
     //...
+];
+```
+
+#### Edit `app/Http/Kernel.php`
+
+```php
+protected $routeMiddleware = [
+    'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+    'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    'can' => \Illuminate\Auth\Middleware\Authorize::class,
+    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+    'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+    //...
+    'role' => \Laratrust\Middleware\LaratrustRole::class,
+    'permission' => \Laratrust\Middleware\LaratrustPermission::class,
+    'ability' => \Laratrust\Middleware\LaratrustAbility::class,
+    //...
+];
 ```
 
 #### Lakukan publish semua komponen :
 
 ```bash
-$ php artisan vendor:publish --tag=passing-grade-publish
+php artisan vendor:publish --tag=passing-grade-publish
+```
+
+#### Lakukan auto dump :
+
+```bash
+composer dump-autoload
+```
+
+#### Lakukan seeding :
+
+```bash
 ```
 
 #### Edit menu `resources/assets/js/menu.js`
@@ -65,11 +95,35 @@ $ php artisan vendor:publish --tag=passing-grade-publish
     childType: 'collapse',
     childItem: [
         //...
+        // Passing Grade (Public)
+        {
+            name: 'Passing Grade (Public)',
+            link: '/passing-grade-public',
+            icon: 'fa fa-angle-double-right',
+        },
         // Passing Grade
         {
             name: 'Passing Grade',
             link: '/dashboard/passing-grade',
-            icon: 'fa fa-angle-double-right'
+            icon: 'fa fa-angle-double-right',
+        },
+        //...
+    ]
+},
+```
+
+```javascript
+{
+    name: 'Admin',
+    icon: 'fa fa-lock',
+    childType: 'collapse',
+    childItem: [
+        //...
+        // Passing Grade
+        {
+            name: 'Passing Grade',
+            link: '/admin/passing-grade',
+            icon: 'fa fa-angle-double-right',
         },
         //...
     ]
@@ -127,28 +181,76 @@ Vue.component('passing-grade-pie-03', PassingGradePie03);
     component: layout('Default'),
     children: [
         //...
+        // Passing Grade (Public)
+        {
+            path: '/passing-grade-public',
+            components: {
+                main: resolve => require(['~/components/bantenprov/passing-grade/passing-grade-public/PassingGradePublic.index.vue'], resolve),
+                navbar: resolve => require(['~/components/Navbar.vue'], resolve),
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve),
+            },
+            meta: {
+                title: "Passing Grade",
+            },
+        },
+        {
+            path: '/passing-grade-public/:id',
+            components: {
+                main: resolve => require(['~/components/bantenprov/passing-grade/passing-grade-public/PassingGradePublic.show.vue'], resolve),
+                navbar: resolve => require(['~/components/Navbar.vue'], resolve),
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve),
+            },
+            meta: {
+                title: "View Passing Grade",
+            },
+        },
+        //...
         // Passing Grade
         {
             path: '/dashboard/passing-grade',
             components: {
-                main: resolve => require(['~/components/bantenprov/passing-grade/passing-grade/PassingGrade.index.vue'], resolve),
+                main: resolve => require(['~/components/views/bantenprov/passing-grade/passing-grade/PassingGradeDashboard.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
                 sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
             },
             meta: {
-                title: "Passing Grade"
-            }
+                title: "Passing Grade",
+            },
+        },
+        //...
+    ]
+},
+```
+
+```javascript
+{
+    path: '/admin',
+    redirect: '/admin/dashboard/home',
+    component: layout('Default'),
+    children: [
+        //...
+        // Passing Grade
+        {
+            path: '/admin/passing-grade',
+            components: {
+                main: resolve => require(['~/components/bantenprov/passing-grade/passing-grade/PassingGrade.index.vue'], resolve),
+                navbar: resolve => require(['~/components/Navbar.vue'], resolve),
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve),
+            },
+            meta: {
+                title: "Passing Grade",
+            },
         },
         {
-            path: '/dashboard/passing-grade/:id',
+            path: '/admin/passing-grade/:id',
             components: {
                 main: resolve => require(['~/components/bantenprov/passing-grade/passing-grade/PassingGrade.show.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve),
             },
             meta: {
-                title: "View Passing Grade"
-            }
+                title: "View Passing Grade",
+            },
         },
         //...
     ]
