@@ -194,7 +194,7 @@ Vue.component('passing-grade-pie-03', PassingGradePie03);
             },
         },
         {
-            path: '/passing-grade-public/:id',
+            path: '/passing-grade-public/:id/:track?',
             components: {
                 main: resolve => require(['~/components/bantenprov/passing-grade/passing-grade-public/PassingGradePublic.show.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
@@ -242,7 +242,7 @@ Vue.component('passing-grade-pie-03', PassingGradePie03);
             },
         },
         {
-            path: '/admin/passing-grade/:id',
+            path: '/admin/passing-grade/:id/:track?',
             components: {
                 main: resolve => require(['~/components/bantenprov/passing-grade/passing-grade/PassingGrade.show.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
