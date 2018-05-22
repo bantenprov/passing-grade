@@ -104,7 +104,7 @@ export default {
     }
   },
   mounted: function () {
-    axios.get('/json/bantenprov/sktm/passing-grade/passing-grade-pie-020.json').then(response => {
+    axios.get('/json/bantenprov/passing-grade/passing-grade/passing-grade-pie-020.json').then(response => {
 
       let ke = 0;
 

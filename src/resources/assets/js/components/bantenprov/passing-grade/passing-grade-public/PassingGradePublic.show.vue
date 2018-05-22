@@ -40,9 +40,6 @@
           @vuetable:loaded="onLoaded">
           <template slot="actions" slot-scope="props">
             <div class="btn-group pull-right" role="group" style="display:flex;">
-              <button class="btn btn-primary btn-sm" role="button" @click="createRow(props.rowData)">
-                <span class="fa fa-plus"></span> Terima
-              </button>
               <!-- <button class="btn btn-info btn-sm" role="button" @click="viewRow(props.rowData)">
                 <span class="fa fa-eye"></span>
               </button> -->
@@ -91,7 +88,7 @@ export default {
       loading: true,
       title: 'View Passing Grade',
       sub_title: '',
-      api_url: '/api/passing-grade/'+this.$route.params.id+'/'+this.$route.params.track,
+      api_url: '/api/passing-grade-public/'+this.$route.params.id+'/'+this.$route.params.track,
       fields: [
         {
           name: '__sequence',
@@ -141,12 +138,12 @@ export default {
           // sortField: 'nilai.akademik',
           titleClass: 'center aligned',
         },
-        {
-          name: '__slot:actions',
-          title: 'Actions',
-          titleClass: 'center aligned',
-          dataClass: 'center aligned',
-        },
+        // {
+        //   name: '__slot:actions',
+        //   title: 'Actions',
+        //   titleClass: 'center aligned',
+        //   dataClass: 'center aligned',
+        // },
       ],
       sortOrder: [{
         field: 'nama_siswa',
@@ -219,19 +216,19 @@ export default {
       this.loading = false;
     },
     createRow(rowData) {
-      window.location = '#/admin/seleksi/create/'+rowData.id;
+      window.location = '#/seleksi/create/'+rowData.id;
     },
     viewRow(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id;
+      window.location = '#/seleksi/'+rowData.id;
     },
     viewRowGeneral(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id+'/general';
+      window.location = '#/seleksi/'+rowData.id+'/general';
     },
     viewRowAchievement(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id+'/achievement';
+      window.location = '#/seleksi/'+rowData.id+'/achievement';
     },
     editRow(rowData) {
-      window.location = '#/admin/seleksi/'+rowData.id+'/edit';
+      window.location = '#/seleksi/'+rowData.id+'/edit';
     },
     deleteRow(rowData) {
       let app = this;
@@ -286,8 +283,8 @@ export default {
       });
     },
     back() {
-      window.location = '#/admin/passing-grade';
-    }
+      window.location = '#/passing-grade-public';
+    },
   },
   events: {
     'filter-set' (filterText) {
