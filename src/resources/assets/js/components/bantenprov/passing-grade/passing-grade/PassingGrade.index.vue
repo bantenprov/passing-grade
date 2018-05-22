@@ -182,10 +182,10 @@ export default {
       window.location = '#/admin/passing-grade/'+rowData.id;
     },
     viewRowGeneral(rowData) {
-      window.location = '#/admin/passing-grade/'+rowData.id+'/general';
+      window.location = '#/admin/passing-grade/'+rowData.id+'/umum';
     },
     viewRowAchievement(rowData) {
-      window.location = '#/admin/passing-grade/'+rowData.id+'/achievement';
+      window.location = '#/admin/passing-grade/'+rowData.id+'/prestasi';
     },
     editRow(rowData) {
       window.location = '#/admin/passing-grade/'+rowData.id+'/edit';
