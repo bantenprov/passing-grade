@@ -135,9 +135,9 @@ class PassingGradeController extends Controller
         }
 
         if (Auth::User()->hasRole(['superadministrator'])) {
-            $query->where('sekolah_id', '=', $id);
-        } else if (!is_null($this->admin_sekolah)) {
-            $query->where('sekolah_id', '=', $this->admin_sekolah->sekolah_id);
+            //
+        } else {
+            $query->where('sekolah_id', $this->admin_sekolah_id);
         }
 
         if ($track == 'umum') {
@@ -147,11 +147,12 @@ class PassingGradeController extends Controller
         }
 
         $perPage    = request()->has('per_page') ? (int) request()->per_page : null;
+        $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user', 'akademik', 'nilai'])->paginate($perPage);
 
         if (is_null($this->admin_sekolah) && !Auth::User()->hasRole(['superadministrator'])) {
-            $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user', 'akademik', 'nilai'])->paginate($perPage);
+            // $response = (object) [];
         } else {
-            $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user', 'akademik', 'nilai'])->paginate($perPage);
+            //
         }
 
         foreach ($response as $siswa) {
