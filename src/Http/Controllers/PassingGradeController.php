@@ -41,8 +41,9 @@ class PassingGradeController extends Controller
         $this->sekolah          = new Sekolah;
         $this->siswa            = new Siswa;
         $this->user             = new User;
+        $this->user_id          = isset(Auth::User()->id) ?? null;
         $this->admin_sekolah    = AdminSekolah::where('admin_sekolah_id', $this->user_id)->first();
-        $this->user_id          = isset(Auth::User()->id) ? Auth::User()->id : null;
+        $this->admin_sekolah_id = isset($this->admin_sekolah->sekolah_id) ?? null;
     }
 
     /**
@@ -78,17 +79,17 @@ class PassingGradeController extends Controller
 
         if (Auth::User()->hasRole(['superadministrator'])) {
             //
-        } else if (!is_null($this->admin_sekolah)) {
-            $query->where('id', $this->admin_sekolah->sekolah_id);
+        } else {
+            $query->where('id', $this->admin_sekolah_id);
         }
 
         $perPage = request()->has('per_page') ? (int) request()->per_page : null;
         $response = $query->with(['jenis_sekolah', 'province', 'city', 'district', 'village', 'master_zona', 'user'])->paginate($perPage);
 
         if (is_null($this->admin_sekolah) && !Auth::User()->hasRole(['superadministrator'])) {
-            $response   = $query->with(['user'])->paginate($perPage);
+            // $response = (object) [];
         } else {
-            $response   = $query->with(['user'])->paginate($perPage);
+            //
         }
 
         return response()->json($response)
@@ -134,9 +135,9 @@ class PassingGradeController extends Controller
         }
 
         if (Auth::User()->hasRole(['superadministrator'])) {
-            $query->where('sekolah_id', '=', $id);
-        } else if (!is_null($this->admin_sekolah)) {
-            $query->where('sekolah_id', '=', $this->admin_sekolah->sekolah_id);
+            //
+        } else {
+            $query->where('sekolah_id', $this->admin_sekolah_id);
         }
 
         if ($track == 'umum') {
@@ -146,11 +147,12 @@ class PassingGradeController extends Controller
         }
 
         $perPage    = request()->has('per_page') ? (int) request()->per_page : null;
+        $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user', 'akademik', 'nilai'])->paginate($perPage);
 
         if (is_null($this->admin_sekolah) && !Auth::User()->hasRole(['superadministrator'])) {
-            $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user', 'akademik', 'nilai'])->paginate($perPage);
+            // $response = (object) [];
         } else {
-            $response   = $query->with(['province', 'city', 'district', 'village', 'sekolah', 'prodi_sekolah', 'user', 'akademik', 'nilai'])->paginate($perPage);
+            //
         }
 
         foreach ($response as $siswa) {
