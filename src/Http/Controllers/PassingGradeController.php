@@ -41,9 +41,9 @@ class PassingGradeController extends Controller
         $this->sekolah          = new Sekolah;
         $this->siswa            = new Siswa;
         $this->user             = new User;
-        $this->user_id          = isset(Auth::User()->id) ?? null;
-        $this->admin_sekolah    = AdminSekolah::where('admin_sekolah_id', $this->user_id)->first();
-        $this->admin_sekolah_id = isset($this->admin_sekolah->sekolah_id) ?? null;
+        $this->user_id          = isset(Auth::User()->id) ? $this->user_id : null;
+        $this->admin_sekolah    = AdminSekolah::where('admin_sekolah_id', Auth::User()->id)->first();
+        $this->admin_sekolah_id = isset($this->admin_sekolah->sekolah_id) ? $this->admin_sekolah->sekolah_id : null;
     }
 
     /**
