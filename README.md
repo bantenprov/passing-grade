@@ -17,13 +17,13 @@ Passing Grade
 - Development snapshot
 
 ```bash
-composer require bantenprov/passing-grade:dev-master
+composer require bantenprov/passing-grade:dev-siswa
 ```
 
 - Latest release:
 
 ```bash
-composer require bantenprov/passing-grade
+composer require bantenprov/passing-grade:dev-siswa
 ```
 
 ### Download via github
